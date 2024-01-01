@@ -5,9 +5,7 @@ class MeController
 {
     // [GET] /me/stored/courses
     async storedCourses(req, res, next) {
-        let courseQuery = Course.find({});
-
-        await Promise.all([courseQuery, Course.countDocumentsWithDeleted({deleted:true})])
+        await Promise.all([Course.find({}).sortable(req), Course.countDocumentsWithDeleted({deleted:true})])
             .then(([courses, deletedCount]) => res.render('me/stored-courses', {
                 deletedCount,
                 courses: multipleMongooseToObject(courses)
